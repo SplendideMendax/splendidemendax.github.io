@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 La Musica Parla 🎵</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Baloo+2:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #667EEA;
+            --accent-color: #764BA2;
+            --bubble-color: #F093FB;
+            --text-color: #FFFFFF;
+            --card-bg: #5A67D8;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+            background-attachment: fixed;
+            font-family: 'Baloo 2', cursive;
+            text-align: center;
+            color: var(--text-color);
+            margin: 0;
+            padding: 10px;
+            overflow-x: hidden;
+            user-select: none;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #FFD93D;
+            font-size: 2.2em;
+            text-shadow: 3px 3px 0px #FF6B9D;
+            margin: 5px 0;
+        }
+
+        .subtitle { font-size: 1.1em; color: #FFF59D; font-weight: bold; margin-bottom: 10px; }
+
+        .main-stage {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(90, 103, 216, 0.95);
+            border-radius: 25px;
+            padding: 15px;
+            border: 6px solid #F093FB;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .meters-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 12px;
+        }
+
+        .meter-box {
+            width: 45%;
+            background: rgba(102, 126, 234, 0.6);
+            border-radius: 15px;
+            padding: 8px;
+            border: 3px solid #C084FC;
+        }
+
+        .meter-label { font-weight: 800; color: #FFF59D; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; }
+
+        .progress-track {
+            height: 20px;
+            background: rgba(118, 75, 162, 0.4);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        #volume-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #FF6B9D 0%, #FEC7D7 100%); transition: width 0.1s; }
+        #stability-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #4ADE80 0%, #A7F3D0 100%); transition: width 0.1s linear; }
+
+        .note-display-wrapper {
+            height: 140px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .magic-bubble {
+            width: 130px;
+            height: 130px;
+            background: radial-gradient(circle at 30% 30%, #FBBF24 10%, #F59E0B 60%, #D97706 100%);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.4), inset -10px -10px 20px rgba(0,0,0,0.2);
+            border: 6px solid #FEF3C7;
+            transform: scale(0.9);
+            opacity: 0.8;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .magic-bubble.active {
+            transform: scale(1.1);
+            opacity: 1;
+            box-shadow: 0 0 50px rgba(251, 191, 36, 0.8);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1.1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1.1); }
+        }
+
+        .note-name-display { font-family: 'Fredoka One'; font-size: 1.4em; color: #92400E; margin-top: -5px; }
+        .note-letter-display { font-family: 'Fredoka One'; font-size: 4em; color: #fff; text-shadow: 2px 2px 0px #B45309; line-height: 0.9; }
+
+        #sentence-area {
+            background-color: #4338CA;
+            color: #FEF3C7;
+            border: 6px solid #C084FC;
+            border-radius: 15px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.2em;
+            letter-spacing: 4px;
+            margin-bottom: 12px;
+            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .controls { display: flex; gap: 12px; justify-content: center; margin-bottom: 10px; }
+
+        .btn-big {
+            font-family: 'Fredoka One';
+            font-size: 1.1em;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        #btn-start { background: linear-gradient(135deg, #34D399 0%, #10B981 100%); box-shadow: 0 4px 0 #059669; }
+        #btn-space { background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%); box-shadow: 0 4px 0 #D97706; }
+        #btn-delete { background: linear-gradient(135deg, #F87171 0%, #EF4444 100%); box-shadow: 0 4px 0 #DC2626; }
+        .btn-big:active { transform: translateY(4px); box-shadow: none; }
+
+        #status { color: #FEF3C7; font-weight: bold; font-size: 0.95em; margin: 8px 0; }
+        #debug-hz { font-size: 11px; color: #E0E7FF; font-family: monospace; margin-bottom: 10px; }
+
+        .guide-container {
+            margin-top: 15px;
+            background: rgba(192, 132, 252, 0.3);
+            border-radius: 20px;
+            padding: 12px;
+            border: 3px dashed #F0ABFC;
+        }
+
+        .guide-title { font-family: 'Fredoka One'; font-size: 1.2em; color: #FEF3C7; margin-bottom: 10px; }
+
+        .guide-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            max-width: 100%;
+        }
+
+        .guide-key {
+            background: linear-gradient(135deg, #818CF8 0%, #6366F1 100%);
+            border-radius: 8px;
+            padding: 6px 10px;
+            text-align: center;
+            width: 52px;
+            border: 2px solid #A5B4FC;
+        }
+
+        .oct-2 { background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%); border-color: #93C5FD; }
+        .oct-3 { background: linear-gradient(135deg, #34D399 0%, #10B981 100%); border-color: #6EE7B7; }
+        .oct-4 { background: linear-gradient(135deg, #FB923C 0%, #F97316 100%); border-color: #FDBA74; }
+
+        .octave-break { flex-basis: 100%; height: 8px; }
+
+        .key-note { font-weight: 800; font-size: 1.3em; color: #FEF3C7; display: block; }
+        .key-letter { font-family: 'Fredoka One'; font-size: 1.7em; color: #FFFFFF; display: block; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); }
+
+        .flying-letter {
+            position: absolute;
+            font-family: 'Fredoka One';
+            font-size: 4em;
+            color: #FBBF24;
+            text-shadow: 2px 2px 0 #F59E0B, 3px 3px 8px rgba(0, 0, 0, 0.4);
+            z-index: 100;
+            pointer-events: none;
+            transition: all 0.8s ease-in-out;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>🎵 La Musica Parla 🎵</h1>
+    <div class="subtitle">✨ Suona per scrivere magicamente! ✨</div>
+
+    <div class="main-stage">
+
+        <div class="meters-container">
+            <div class="meter-box">
+                <div class="meter-label">Volume Strumento</div>
+                <div class="progress-track">
+                    <div id="volume-bar"></div>
+                </div>
+            </div>
+            <div class="meter-box">
+                <div class="meter-label">Caricamento Lettera...</div>
+                <div class="progress-track">
+                    <div id="stability-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="note-display-wrapper">
+            <div id="current-note-bubble" class="magic-bubble">
+                <span id="display-note-name" class="note-name-display">--</span>
+                <span id="display-letter" class="note-letter-display">?</span>
+            </div>
+        </div>
+
+        <div id="sentence-area">
+            <span id="sentence-text"></span>
+        </div>
+
+        <div class="controls">
+            <button id="btn-start" class="btn-big" onclick="avviaMicrofono()">Inizia</button>
+            <button id="btn-space" class="btn-big" onclick="inserisciSpazio()">Spazio</button>
+            <button id="btn-delete" class="btn-big" onclick="cancellaUltima()">Cancella</button>
+        </div>
+        <div id="status">Clicca INIZIA!</div>
+        <div id="debug-hz"></div>
+
+        <div class="guide-container">
+            <div class="guide-title">La Mappa delle Note</div>
+            <div class="guide-grid" id="guide-grid">
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const HOLD_DURATION_MS = 1000; 
+        const CONFIG = {
+            bufferSize: 4096, 
+            yinThreshold: 0.20,
+            probabilityThreshold: 0.80, 
+            cooldownMs: 1500,
+            noteToleranceCents: 50,
+            stabilityRequired: Math.round(HOLD_DURATION_MS / 16.66) 
+        };
+
+        const NOTE_NAMES = ["Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si"];
+        const MAPPA_LETTERE = {
+            "Do2":"A","Re2":"B","Mi2":"C","Fa2":"D","Sol2":"E","La2":"F","Si2":"G",
+            "Do3":"H","Re3":"I","Mi3":"L","Fa3":"M","Sol3":"N","La3":"O","Si3":"P",
+            "Do4":"Q","Re4":"R","Mi4":"S","Fa4":"T","Sol4":"U","La4":"V","Si4":"Z"
+        };
+
+        const TARGET_NOTES = [];
+
+        function initDataAndGuide() {
+            const guideContainer = document.getElementById('guide-grid');
+            const octaves = [2, 3, 4];
+
+            octaves.forEach((oct, octIndex) => {
+                Object.keys(MAPPA_LETTERE).forEach(key => {
+                    let cleanKey = key.replace("_", ""); 
+                    let notePart = cleanKey.slice(0, -1); 
+                    let octPart = parseInt(cleanKey.slice(-1)); 
+
+                    if (octPart !== oct) return;
+
+                    let semitoneIndex = NOTE_NAMES.indexOf(notePart);
+                    if (semitoneIndex !== -1) {
+                        let midi = octPart * 12 + semitoneIndex + 12;
+                        let freq = 440 * Math.pow(2, (midi - 69) / 12);
+
+                        TARGET_NOTES.push({
+                            id: key, 
+                            name: notePart,
+                            oct: octPart,
+                            freq: freq,
+                            letter: MAPPA_LETTERE[key]
+                        });
+
+                        let div = document.createElement('div');
+                        div.className = `guide-key oct-${octPart}`;
+                        div.innerHTML = `<span class="key-note">${notePart}${octPart}</span><span class="key-letter">${MAPPA_LETTERE[key]}</span>`;
+                        guideContainer.appendChild(div);
+                    }
+                });
+
+                if (octIndex < octaves.length - 1) {
+                    let breaker = document.createElement('div');
+                    breaker.className = 'octave-break';
+                    guideContainer.appendChild(breaker);
+                }
+            });
+        }
+        initDataAndGuide();
+
+        let audioCtx, analyser, dataArray;
+        let isRunning = false;
+        let stabilityCount = 0;
+        let lastDetectedNote = null;
+        let lastWriteTime = 0;
+        let sampleRate = 0;
+
+        async function avviaMicrofono() {
+            if (isRunning) return;
+            const btn = document.getElementById('btn-start');
+
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                sampleRate = audioCtx.sampleRate;
+
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: { 
+                        echoCancellation: false, 
+                        noiseSuppression: false, 
+                        autoGainControl: false 
+                    }
+                });
+
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = CONFIG.bufferSize; 
+
+                const source = audioCtx.createMediaStreamSource(stream);
+                source.connect(analyser);
+
+                dataArray = new Float32Array(CONFIG.bufferSize);
+                isRunning = true;
+
+                btn.textContent = "👂 Sto ascoltando...";
+                btn.style.background = "linear-gradient(135deg, #94A3B8 0%, #64748B 100%)"; 
+                btn.style.boxShadow = "none";
+                document.getElementById('status').textContent = "Vai! Suona una nota lunga!";
+
+                detectLoop();
+
+            } catch (err) {
+                console.error(err);
+                alert("Non riesco a sentire! Controlla il microfono.");
+            }
+        }
+
+        function getPitchYIN(buffer, sampleRate) {
+            let bufferSize = buffer.length;
+            let yinBuffer = new Float32Array(bufferSize / 2);
+            let probability = 0.0;
+            let pitchInHz = -1;
+
+            for (let tau = 0; tau < bufferSize / 2; tau++) yinBuffer[tau] = 0;
+            for (let tau = 1; tau < bufferSize / 2; tau++) {
+                for (let i = 0; i < bufferSize / 2; i++) {
+                    let delta = buffer[i] - buffer[i + tau];
+                    yinBuffer[tau] += delta * delta;
+                }
+            }
+
+            yinBuffer[0] = 1;
+            let runningSum = 0;
+            for (let tau = 1; tau < bufferSize / 2; tau++) {
+                runningSum += yinBuffer[tau];
+                yinBuffer[tau] *= tau / runningSum;
+            }
+
+            let tauEstimate = -1;
+            for (let tau = 2; tau < bufferSize / 2; tau++) {
+                if (yinBuffer[tau] < CONFIG.yinThreshold) {
+                    while (tau + 1 < bufferSize / 2 && yinBuffer[tau + 1] < yinBuffer[tau]) tau++;
+                    tauEstimate = tau;
+                    probability = 1 - yinBuffer[tau];
+                    break;
+                }
+            }
+
+            if (tauEstimate !== -1) {
+                let betterTau = tauEstimate;
+                let x0 = tauEstimate;
+                let x2 = (tauEstimate + 1 < bufferSize / 2) ? tauEstimate + 1 : tauEstimate;
+                let x1 = (tauEstimate - 1 >= 0) ? tauEstimate - 1 : tauEstimate;
+                let s0 = yinBuffer[x0];
+                let s1 = yinBuffer[x1];
+                let s2 = yinBuffer[x2];
+                if (s0 < s1 && s0 < s2) betterTau = x0 + (s2 - s1) / (2 * (2 * s0 - s2 - s1));
+                pitchInHz = sampleRate / betterTau;
+            }
+
+            return { pitch: pitchInHz, probability: probability };
+        }
+
+        function findClosestNote(pitch) {
+            if (pitch < 50 || pitch > 2000) return null; 
+            let closest = null;
+            let minCentsDiff = Infinity;
+
+            for (let note of TARGET_NOTES) {
+                let centsDiff = 1200 * Math.log2(pitch / note.freq);
+                let absCents = Math.abs(centsDiff);
+                if (absCents < minCentsDiff) {
+                    minCentsDiff = absCents;
+                    closest = note;
+                }
+            }
+
+            if (minCentsDiff < CONFIG.noteToleranceCents) return closest;
+            return null;
+        }
+
+        function detectLoop() {
+            if (!isRunning) return;
+            requestAnimationFrame(detectLoop);
+
+            analyser.getFloatTimeDomainData(dataArray);
+
+            let result = getPitchYIN(dataArray, sampleRate);
+            let detectedPitch = result.pitch;
+            let probability = result.probability; 
+            let visualScore = Math.max(0, probability - 0.5) * 200; 
+            updateVolumeBar(visualScore);
+
+            let bestNote = null;
+            if (probability > CONFIG.probabilityThreshold) {
+                bestNote = findClosestNote(detectedPitch);
+            }
+
+            if (bestNote) {
+                document.getElementById('debug-hz').textContent = `Hz: ${detectedPitch.toFixed(1)} | Nota: ${bestNote.name}${bestNote.oct}`;
+
+                updatePreview(bestNote);
+
+                const inCooldown = (Date.now() - lastWriteTime < CONFIG.cooldownMs);
+
+                if (inCooldown) {
+                    stabilityCount = 0;
+                    updateStabilityBar(0);
+                    lastDetectedNote = bestNote; 
+
+                } else if (lastDetectedNote && lastDetectedNote.id === bestNote.id) {
+                    stabilityCount++;
+                    updateStabilityBar(stabilityCount);
+
+                    if (stabilityCount >= CONFIG.stabilityRequired) {
+                        confermaScrittura(bestNote);
+                        lastWriteTime = Date.now();
+                        stabilityCount = 0; 
+                    }
+                } else {
+                    stabilityCount = Math.max(0, stabilityCount - 3); 
+                    if (stabilityCount === 0) {
+                        lastDetectedNote = bestNote;
+                    }
+                    updateStabilityBar(stabilityCount);
+                }
+            } else {
+                resetSilence();
+            }
+        }
+
+        function updatePreview(note) {
+            const bubble = document.getElementById('current-note-bubble');
+            const dispName = document.getElementById('display-note-name');
+            const dispLetter = document.getElementById('display-letter');
+
+            dispName.innerHTML = `${note.name}<sub>${note.oct}</sub>`;
+            dispLetter.textContent = note.letter;
+            bubble.style.opacity = "1"; 
+            bubble.style.transform = "scale(1.05)";
+            bubble.style.borderColor = "#FEF3C7";
+        }
+
+        function confermaScrittura(note) {
+            const bubble = document.getElementById('current-note-bubble');
+            bubble.classList.add('active'); 
+
+            animaLetteraVersoFrase(note.letter);
+
+            setTimeout(() => {
+                bubble.classList.remove('active');
+            }, 500);
+        }
+
+        function animaLetteraVersoFrase(lettera) {
+            const sentenceArea = document.getElementById('sentence-area');
+            const flyer = document.createElement('div');
+            flyer.classList.add('flying-letter');
+            flyer.textContent = lettera;
+
+            const bubbleRect = document.getElementById('current-note-bubble').getBoundingClientRect();
+            flyer.style.left = (bubbleRect.left + bubbleRect.width/2 - 20) + 'px';
+            flyer.style.top = (bubbleRect.top + bubbleRect.height/2 - 40) + 'px';
+
+            document.body.appendChild(flyer);
+
+            const sentenceRect = sentenceArea.getBoundingClientRect();
+            const destTop = sentenceRect.top + sentenceRect.height/2 - 40;
+            const destLeft = sentenceRect.left + sentenceRect.width/2;
+
+            requestAnimationFrame(() => {
+                flyer.style.top = destTop + 'px';
+                flyer.style.left = destLeft + 'px';
+                flyer.style.opacity = '0';
+                flyer.style.transform = "scale(0.2) rotate(360deg)";
+            });
+
+            setTimeout(() => {
+                flyer.remove();
+                document.getElementById('sentence-text').textContent += lettera;
+            }, 800);
+        }
+
+        function updateVolumeBar(val) {
+            const pct = Math.min(100, val);
+            const bar = document.getElementById('volume-bar');
+            bar.style.width = pct + "%";
+        }
+
+        function updateStabilityBar(val) {
+            const pct = Math.min(100, (val / CONFIG.stabilityRequired) * 100);
+            const bar = document.getElementById('stability-bar');
+            bar.style.width = pct + "%";
+        }
+
+        function resetSilence() {
+            stabilityCount = Math.max(0, stabilityCount - 2);
+            updateStabilityBar(stabilityCount);
+
+            if (stabilityCount === 0) {
+                const bubble = document.getElementById('current-note-bubble');
+                bubble.style.opacity = "0.5";
+                bubble.style.transform = "scale(0.9)";
+                bubble.style.borderColor = "#FEF3C7";
+                document.getElementById('debug-hz').textContent = "...";
+            }
+        }
+        function inserisciSpazio() {
+            const el = document.getElementById('sentence-text');
+            el.textContent += " ";
+        }
+        function cancellaUltima() {
+            const el = document.getElementById('sentence-text');
+            el.textContent = el.textContent.slice(0, -1);
+        }
+    </script>
+</body>
+</html>
