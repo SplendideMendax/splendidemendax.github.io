@@ -1,564 +1,721 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎵 La Musica Parla 🎵</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Baloo+2:wght@400;700&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎻 La Musica Parla – Violoncello</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-base:        #f0f4ff;
+  --glass-white:    rgba(255,255,255,0.72);
+  --glass-white-hi: rgba(255,255,255,0.88);
+  --glass-border:   rgba(255,255,255,0.90);
+  --glass-shadow:   0 8px 32px rgba(100,120,200,0.10), 0 2px 8px rgba(100,120,200,0.08);
+  --accent:         #4F80FF;
+  --accent-soft:    rgba(79,128,255,0.12);
+  --accent-text:    #2a5cdb;
+  --green:          #34C759;
+  --red:            #FF3B30;
+  --red-soft:       rgba(255,59,48,0.12);
+  --yellow:         #FF9F0A;
+  --text-primary:   #1a1d2e;
+  --text-secondary: #5a6080;
+  --text-tertiary:  rgba(90,96,128,0.60);
+  --radius-xl:      24px;
+  --radius-lg:      18px;
+  --radius-md:      14px;
+  --radius-pill:    100px;
+  --font:           'Nunito', sans-serif;
 
-        :root {
-            --bg-color: #667EEA;
-            --accent-color: #764BA2;
-            --bubble-color: #F093FB;
-            --text-color: #FFFFFF;
-            --card-bg: #5A67D8;
-        }
+  --col-iv:   #E74C3C;
+  --col-iii:  #E67E22;
+  --col-ii:   #2980B9;
+  --col-i:    #8E44AD;
+}
 
-        body {
-            background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
-            background-attachment: fixed;
-            font-family: 'Baloo 2', cursive;
-            text-align: center;
-            color: var(--text-color);
-            margin: 0;
-            padding: 10px;
-            overflow-x: hidden;
-            user-select: none;
-            min-height: 100vh;
-        }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        h1 {
-            font-family: 'Fredoka One', cursive;
-            color: #FFD93D;
-            font-size: 2.2em;
-            text-shadow: 3px 3px 0px #FF6B9D;
-            margin: 5px 0;
-        }
+body {
+  font-family: var(--font);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
 
-        .subtitle { font-size: 1.1em; color: #FFF59D; font-weight: bold; margin-bottom: 10px; }
+.bg-wrap { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+.bg-blob { position: absolute; border-radius: 50%; filter: blur(90px); animation: float-blob 12s ease-in-out infinite; }
+.bg-blob-a { width: 700px; height: 700px; background: radial-gradient(circle, #c7d9ff 0%, #dde8ff 60%, transparent 100%); top: -200px; left: -200px; animation-delay: 0s; }
+.bg-blob-b { width: 550px; height: 550px; background: radial-gradient(circle, #ffd6f0 0%, #ffe8f7 60%, transparent 100%); bottom: -150px; right: -120px; animation-delay: -4s; }
+.bg-blob-c { width: 400px; height: 400px; background: radial-gradient(circle, #c8f5e0 0%, #d6f5e8 60%, transparent 100%); top: 50%; left: 55%; animation-delay: -8s; }
+@keyframes float-blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(30px,-40px) scale(1.04)} 66%{transform:translate(-20px,25px) scale(0.97)} }
 
-        .main-stage {
-            max-width: 900px;
-            margin: 0 auto;
-            background: rgba(90, 103, 216, 0.95);
-            border-radius: 25px;
-            padding: 15px;
-            border: 6px solid #F093FB;
-            position: relative;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
+.wrapper { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 28px 16px 60px; }
 
-        .meters-container {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 12px;
-        }
+.glass {
+  background: var(--glass-white);
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  border: 1.5px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+}
 
-        .meter-box {
-            width: 45%;
-            background: rgba(102, 126, 234, 0.6);
-            border-radius: 15px;
-            padding: 8px;
-            border: 3px solid #C084FC;
-        }
+.header { text-align: center; padding: 10px 0 24px; animation: fade-up 0.6s cubic-bezier(0.34,1.56,0.64,1) both; }
+.header-icon { font-size: 2.8rem; display: inline-block; animation: icon-bounce 3s ease-in-out infinite; margin-bottom: 8px; filter: drop-shadow(0 4px 12px rgba(79,128,255,0.25)); }
+@keyframes icon-bounce { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-6px) rotate(3deg)} }
+h1 { font-family: var(--font); font-size: clamp(1.9rem,7vw,2.8rem); font-weight: 900; color: var(--text-primary); letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 6px; }
+.subtitle { font-size: 0.95rem; font-weight: 600; color: var(--text-secondary); }
+@keyframes fade-up { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
-        .meter-label { font-weight: 800; color: #FFF59D; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; }
+.card-anim { animation: fade-up 0.55s cubic-bezier(0.34,1.56,0.64,1) both; }
+.card-anim:nth-child(2){animation-delay:0.08s}
+.card-anim:nth-child(3){animation-delay:0.16s}
+.card-anim:nth-child(4){animation-delay:0.24s}
+.card-anim:nth-child(5){animation-delay:0.32s}
 
-        .progress-track {
-            height: 20px;
-            background: rgba(118, 75, 162, 0.4);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
-        }
+.main-card { padding: 20px; margin-bottom: 14px; }
 
-        #volume-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #FF6B9D 0%, #FEC7D7 100%); transition: width 0.1s; }
-        #stability-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #4ADE80 0%, #A7F3D0 100%); transition: width 0.1s linear; }
+.meters-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 22px; }
+.meter-pill { background: var(--glass-white-hi); border: 1.5px solid rgba(255,255,255,0.95); border-radius: var(--radius-lg); padding: 10px 12px; box-shadow: 0 2px 8px rgba(80,100,180,0.07); }
+.meter-label { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.10em; color: var(--text-tertiary); margin-bottom: 7px; }
+.track { height: 7px; border-radius: 100px; background: rgba(0,0,0,0.06); overflow: hidden; position: relative; }
+.track-fill { height: 100%; border-radius: 100px; width: 0%; position: relative; transition: width 0.18s ease-out; }
+.track-fill::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.5) 50%,transparent 100%); transform:translateX(-100%); animation:shimmer 2s ease-in-out infinite; }
+@keyframes shimmer { to{transform:translateX(200%)} }
+#volume-bar    { background: linear-gradient(90deg, #FF9F0A, #FF6B6B); }
+#stability-bar { background: linear-gradient(90deg, #34C759, #30D158); transition: width 0.18s ease-out, background 0.3s ease; }
+#stability-bar.glitching { background: linear-gradient(90deg, #FF9F0A, #FFCC00); }
+#stability-bar.locked { background: linear-gradient(90deg, #34C759, #30D158); }
 
-        .note-display-wrapper {
-            height: 140px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 10px 0;
-        }
+.pitch-wrap { position: relative; height: 20px; display: flex; align-items: center; }
+.pitch-rail { position: relative; width: 100%; height: 7px; border-radius: 100px; background: rgba(0,0,0,0.07); overflow: hidden; }
+.pitch-zone { position: absolute; top: 0; bottom: 0; width: 50%; opacity: 0.45; }
+.pitch-zone-l { left: 0;   background: linear-gradient(90deg, #FF6B6B, transparent); border-radius: 100px 0 0 100px; }
+.pitch-zone-r { right: 0;  background: linear-gradient(270deg, #FF6B6B, transparent); border-radius: 0 100px 100px 0; }
+.pitch-tick { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,0.7); transform: translateX(-50%); }
+#pitch-marker {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%) translateX(0px);
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #fff; border: 2.5px solid var(--accent);
+  box-shadow: 0 0 0 3px rgba(79,128,255,0.20), 0 2px 8px rgba(79,128,255,0.35);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  pointer-events: none; z-index: 2;
+}
+#pitch-marker.tuned { border-color: var(--green); box-shadow: 0 0 0 3px rgba(52,199,89,0.25), 0 2px 8px rgba(52,199,89,0.40); }
+#pitch-marker.sharp { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,128,255,0.22), 0 2px 8px rgba(79,128,255,0.38); }
+#pitch-marker.flat  { border-color: var(--red);    box-shadow: 0 0 0 3px rgba(255,59,48,0.22),   0 2px 8px rgba(255,59,48,0.38); }
 
-        .magic-bubble {
-            width: 130px;
-            height: 130px;
-            background: radial-gradient(circle at 30% 30%, #FBBF24 10%, #F59E0B 60%, #D97706 100%);
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.4), inset -10px -10px 20px rgba(0,0,0,0.2);
-            border: 6px solid #FEF3C7;
-            transform: scale(0.9);
-            opacity: 0.8;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-        }
+.stage { display: flex; align-items: center; justify-content: center; padding: 8px 0 20px; position: relative; }
+.bubble-rings { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.ring { position: absolute; border-radius: 50%; border: 2px solid rgba(79,128,255,0.18); opacity: 0; }
+.ring-1 { width: 180px; height: 180px; }
+.ring-2 { width: 220px; height: 220px; }
+.ring-3 { width: 260px; height: 260px; }
+.bubble-active .ring-1 { animation: ripple 1.8s ease-out infinite; }
+.bubble-active .ring-2 { animation: ripple 1.8s ease-out 0.3s infinite; }
+.bubble-active .ring-3 { animation: ripple 1.8s ease-out 0.6s infinite; }
+@keyframes ripple { 0%{transform:scale(0.85);opacity:0.6} 100%{transform:scale(1.15);opacity:0} }
 
-        .magic-bubble.active {
-            transform: scale(1.1);
-            opacity: 1;
-            box-shadow: 0 0 50px rgba(251, 191, 36, 0.8);
-            animation: pulse 1s infinite;
-        }
+.magic-bubble {
+  position: relative; z-index: 2;
+  width: 148px; height: 148px; border-radius: 50%;
+  background: var(--glass-white-hi);
+  backdrop-filter: blur(30px) saturate(2); -webkit-backdrop-filter: blur(30px) saturate(2);
+  border: 2px solid rgba(255,255,255,0.95);
+  box-shadow: 0 12px 40px rgba(79,128,255,0.14), 0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,1);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease;
+}
+.magic-bubble.idle    { transform: scale(0.90); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+.magic-bubble.visible { transform: scale(1.00); }
+.magic-bubble.active  { transform: scale(1.07); box-shadow: 0 16px 50px rgba(79,128,255,0.22), 0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,1); animation: bubble-breathe 1s ease-in-out infinite; }
+@keyframes bubble-breathe { 0%,100%{transform:scale(1.07)} 50%{transform:scale(1.11)} }
 
-        @keyframes pulse {
-            0% { transform: scale(1.1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1.1); }
-        }
+.note-name-display  { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); }
+.note-letter-display{ font-family: var(--font); font-size: 4rem; font-weight: 900; line-height: 0.95; letter-spacing: -0.04em; background: linear-gradient(150deg, var(--accent) 10%, #7B61FF 90%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1); }
+.magic-bubble.idle .note-letter-display { background: none; -webkit-text-fill-color: var(--text-tertiary); }
 
-        .note-name-display { font-family: 'Fredoka One'; font-size: 1.4em; color: #92400E; margin-top: -5px; }
-        .note-letter-display { font-family: 'Fredoka One'; font-size: 4em; color: #fff; text-shadow: 2px 2px 0px #B45309; line-height: 0.9; }
+.sentence-card  { margin-bottom: 14px; overflow: hidden; }
+.sentence-inner { padding: 20px 24px; min-height: 84px; display: flex; align-items: center; }
+.sentence-body  { font-family: var(--font); font-size: clamp(2.2rem, 7vw, 3rem); font-weight: 800; letter-spacing: 0.10em; color: var(--text-primary); word-break: keep-all; overflow-wrap: break-word; white-space: pre-wrap; line-height: 1.2; width: 100%; }
+#sentence-text  { display: inline; }
+#sentence-cursor{ display: inline-block; width: 3px; height: 0.75em; background: var(--accent); border-radius: 2px; margin-left: 5px; vertical-align: -0.05em; animation: ios-cursor 1.1s cubic-bezier(0.4,0,0.6,1) infinite; }
+@keyframes ios-cursor { 0%,45%{opacity:1} 55%,100%{opacity:0} }
 
-        #sentence-area {
-            background-color: #4338CA;
-            color: #FEF3C7;
-            border: 6px solid #C084FC;
-            border-radius: 15px;
-            min-height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            font-family: 'Fredoka One', cursive;
-            font-size: 2.2em;
-            letter-spacing: 4px;
-            margin-bottom: 12px;
-            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
+.controls-card { padding: 16px; margin-bottom: 14px; }
+.controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.btn { font-family: var(--font); font-size: 0.92rem; font-weight: 700; padding: 13px 24px; border: none; border-radius: var(--radius-pill); cursor: pointer; letter-spacing: 0.01em; transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.18s ease, opacity 0.18s ease; position: relative; overflow: hidden; -webkit-tap-highlight-color: transparent; }
+.btn::after { content:''; position:absolute; inset:0; border-radius:inherit; background:rgba(0,0,0,0.08); opacity:0; transition:opacity 0.12s; }
+.btn:active::after { opacity: 1; }
+.btn:active  { transform: scale(0.94) !important; }
+.btn:hover   { transform: scale(1.03); }
+.btn:disabled { opacity: 0.38; cursor: not-allowed; transform: none !important; }
+#btn-start  { background: var(--accent); color: #fff; box-shadow: 0 4px 20px rgba(79,128,255,0.38); padding-left: 28px; padding-right: 28px; }
+#btn-start:not(:disabled):hover { box-shadow: 0 6px 28px rgba(79,128,255,0.48); }
+#btn-space  { background: rgba(52,199,89,0.14); border: 1.5px solid rgba(52,199,89,0.35); color: #1a8f3c; box-shadow: 0 2px 10px rgba(52,199,89,0.12); }
+#btn-space:not(:disabled):hover  { box-shadow: 0 4px 16px rgba(52,199,89,0.22); }
+#btn-delete { background: rgba(255,159,10,0.14); border: 1.5px solid rgba(255,159,10,0.35); color: #b86a00; box-shadow: 0 2px 10px rgba(255,159,10,0.12); }
+#btn-delete:not(:disabled):hover { box-shadow: 0 4px 16px rgba(255,159,10,0.24); }
+.status-row { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 2px 0; text-align: center; }
+#status   { font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); }
+#debug-hz { font-size: 0.72rem; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
 
-        .controls { display: flex; gap: 12px; justify-content: center; margin-bottom: 10px; }
+.guide-card { padding: 20px; }
+.guide-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.guide-header h2 { font-size: 1rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.01em; white-space: nowrap; }
+.guide-line { flex: 1; height: 1.5px; background: rgba(0,0,0,0.06); border-radius: 2px; }
 
-        .btn-big {
-            font-family: 'Fredoka One';
-            font-size: 1.1em;
-            padding: 10px 25px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.1s;
-            color: white;
-            text-transform: uppercase;
-        }
+.guide-section { margin-bottom: 14px; }
+.guide-section:last-child { margin-bottom: 0; }
+.guide-section-label {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.10em;
+  text-transform: uppercase; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.string-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+.lbl-iv  { color: var(--col-iv);  } .lbl-iv  .string-dot { background: var(--col-iv);  }
+.lbl-iii { color: var(--col-iii); } .lbl-iii .string-dot { background: var(--col-iii); }
+.lbl-ii  { color: var(--col-ii);  } .lbl-ii  .string-dot { background: var(--col-ii);  }
+.lbl-i   { color: var(--col-i);   } .lbl-i   .string-dot { background: var(--col-i);   }
 
-        #btn-start { background: linear-gradient(135deg, #34D399 0%, #10B981 100%); box-shadow: 0 4px 0 #059669; }
-        #btn-space { background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%); box-shadow: 0 4px 0 #D97706; }
-        #btn-delete { background: linear-gradient(135deg, #F87171 0%, #EF4444 100%); box-shadow: 0 4px 0 #DC2626; }
-        .btn-big:active { transform: translateY(4px); box-shadow: none; }
+.guide-grid { display: flex; flex-wrap: wrap; gap: 6px; }
 
-        #status { color: #FEF3C7; font-weight: bold; font-size: 0.95em; margin: 8px 0; }
-        #debug-hz { font-size: 11px; color: #E0E7FF; font-family: monospace; margin-bottom: 10px; }
+.guide-key {
+  display: flex; flex-direction: column; align-items: center;
+  width: 58px; padding: 8px 4px 6px;
+  border-radius: var(--radius-md); border: 1.5px solid;
+  background: var(--glass-white-hi);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+  cursor: default;
+}
+.guide-key:hover { transform: translateY(-3px) scale(1.05); }
 
-        .guide-container {
-            margin-top: 15px;
-            background: rgba(192, 132, 252, 0.3);
-            border-radius: 20px;
-            padding: 12px;
-            border: 3px dashed #F0ABFC;
-        }
+.str-iv  { border-color: rgba(231,76,60,0.25);  }
+.str-iii { border-color: rgba(230,126,34,0.25); }
+.str-ii  { border-color: rgba(41,128,185,0.25); }
+.str-i   { border-color: rgba(142,68,173,0.25); }
 
-        .guide-title { font-family: 'Fredoka One'; font-size: 1.2em; color: #FEF3C7; margin-bottom: 10px; }
+.str-iv:hover  { box-shadow: 0 6px 18px rgba(231,76,60,0.18);  }
+.str-iii:hover { box-shadow: 0 6px 18px rgba(230,126,34,0.18); }
+.str-ii:hover  { box-shadow: 0 6px 18px rgba(41,128,185,0.18); }
+.str-i:hover   { box-shadow: 0 6px 18px rgba(142,68,173,0.18); }
 
-        .guide-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 6px;
-            max-width: 100%;
-        }
+.key-note {
+  display: block;
+  font-size: 0.58rem; font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 1px;
+  white-space: nowrap;
+}
+.str-iv  .key-note { color: var(--col-iv);  }
+.str-iii .key-note { color: var(--col-iii); }
+.str-ii  .key-note { color: var(--col-ii);  }
+.str-i   .key-note { color: var(--col-i);   }
 
-        .guide-key {
-            background: linear-gradient(135deg, #818CF8 0%, #6366F1 100%);
-            border-radius: 8px;
-            padding: 6px 10px;
-            text-align: center;
-            width: 52px;
-            border: 2px solid #A5B4FC;
-        }
+.key-letter {
+  display: block; font-family: var(--font);
+  font-size: 1.25rem; font-weight: 900;
+  color: var(--text-primary); letter-spacing: -0.02em;
+  line-height: 1.1;
+}
 
-        .oct-2 { background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%); border-color: #93C5FD; }
-        .oct-3 { background: linear-gradient(135deg, #34D399 0%, #10B981 100%); border-color: #6EE7B7; }
-        .oct-4 { background: linear-gradient(135deg, #FB923C 0%, #F97316 100%); border-color: #FDBA74; }
+.key-music-note {
+  display: block;
+  font-size: 0.60rem; font-weight: 700;
+  color: var(--text-tertiary);
+  letter-spacing: 0.01em;
+  margin-top: 2px;
+  white-space: nowrap;
+}
 
-        .octave-break { flex-basis: 100%; height: 8px; }
+.flying-letter { position: fixed; font-family: var(--font); font-size: 3.4rem; font-weight: 900; letter-spacing: -0.03em; color: var(--accent); filter: drop-shadow(0 4px 16px rgba(79,128,255,0.40)); z-index: 999; pointer-events: none; will-change: top, left, opacity, transform; }
 
-        .key-note { font-weight: 800; font-size: 1.3em; color: #FEF3C7; display: block; }
-        .key-letter { font-family: 'Fredoka One'; font-size: 1.7em; color: #FFFFFF; display: block; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); }
+.credit { text-align: center; padding: 20px 0 8px; font-size: 0.72rem; font-weight: 600; color: var(--text-tertiary); letter-spacing: 0.05em; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.credit-line { width: 32px; height: 1.5px; background: linear-gradient(90deg, transparent, rgba(79,128,255,0.30), transparent); border-radius: 2px; }
+.credit a { color: var(--accent-text); text-decoration: none; font-weight: 700; transition: opacity 0.15s; }
+.credit a:hover { opacity: 0.7; }
 
-        .flying-letter {
-            position: absolute;
-            font-family: 'Fredoka One';
-            font-size: 4em;
-            color: #FBBF24;
-            text-shadow: 2px 2px 0 #F59E0B, 3px 3px 8px rgba(0, 0, 0, 0.4);
-            z-index: 100;
-            pointer-events: none;
-            transition: all 0.8s ease-in-out;
-        }
-
-    </style>
+@media (max-width: 420px) {
+  .meters-row { gap: 7px; } .meter-pill { padding: 8px 9px; }
+  .magic-bubble { width: 130px; height: 130px; } .note-letter-display { font-size: 3.2rem; }
+  .ring-1{width:155px;height:155px} .ring-2{width:190px;height:190px} .ring-3{width:225px;height:225px}
+  .guide-key { width: 52px; }
+  .controls { gap: 8px; } .btn { padding: 12px 18px; font-size: 0.86rem; }
+}
+</style>
 </head>
 <body>
 
-    <h1>🎵 La Musica Parla 🎵</h1>
-    <div class="subtitle">✨ Suona per scrivere magicamente! ✨</div>
+<div class="bg-wrap">
+  <div class="bg-blob bg-blob-a"></div>
+  <div class="bg-blob bg-blob-b"></div>
+  <div class="bg-blob bg-blob-c"></div>
+</div>
 
-    <div class="main-stage">
+<div class="wrapper">
 
-        <div class="meters-container">
-            <div class="meter-box">
-                <div class="meter-label">Volume Strumento</div>
-                <div class="progress-track">
-                    <div id="volume-bar"></div>
-                </div>
-            </div>
-            <div class="meter-box">
-                <div class="meter-label">Caricamento Lettera...</div>
-                <div class="progress-track">
-                    <div id="stability-bar"></div>
-                </div>
-            </div>
+  <div class="header card-anim">
+    <div class="header-icon">🎻</div>
+    <h1>La Musica Parla</h1>
+    <p class="subtitle">✨ Suona una nota e guardala trasformarsi in lettera ✨</p>
+  </div>
+
+  <div class="glass main-card card-anim">
+    <div class="meters-row">
+      <div class="meter-pill">
+        <div class="meter-label">Volume</div>
+        <div class="track"><div id="volume-bar" class="track-fill"></div></div>
+      </div>
+      <div class="meter-pill">
+        <div class="meter-label">Intonazione</div>
+        <div class="pitch-wrap">
+          <div class="pitch-rail">
+            <div class="pitch-zone pitch-zone-l"></div>
+            <div class="pitch-zone pitch-zone-r"></div>
+            <div class="pitch-tick"></div>
+          </div>
+          <div id="pitch-marker"></div>
         </div>
-
-        <div class="note-display-wrapper">
-            <div id="current-note-bubble" class="magic-bubble">
-                <span id="display-note-name" class="note-name-display">--</span>
-                <span id="display-letter" class="note-letter-display">?</span>
-            </div>
-        </div>
-
-        <div id="sentence-area">
-            <span id="sentence-text"></span>
-        </div>
-
-        <div class="controls">
-            <button id="btn-start" class="btn-big" onclick="avviaMicrofono()">Inizia</button>
-            <button id="btn-space" class="btn-big" onclick="inserisciSpazio()">Spazio</button>
-            <button id="btn-delete" class="btn-big" onclick="cancellaUltima()">Cancella</button>
-        </div>
-        <div id="status">Clicca INIZIA!</div>
-        <div id="debug-hz"></div>
-
-        <div class="guide-container">
-            <div class="guide-title">La Mappa delle Note</div>
-            <div class="guide-grid" id="guide-grid">
-            </div>
-        </div>
-
+      </div>
+      <div class="meter-pill">
+        <div class="meter-label">Caricamento</div>
+        <div class="track"><div id="stability-bar" class="track-fill"></div></div>
+      </div>
     </div>
 
-    <script>
-        const HOLD_DURATION_MS = 1000; 
-        const CONFIG = {
-            bufferSize: 4096, 
-            yinThreshold: 0.20,
-            probabilityThreshold: 0.80, 
-            cooldownMs: 1500,
-            noteToleranceCents: 50,
-            stabilityRequired: Math.round(HOLD_DURATION_MS / 16.66) 
-        };
+    <div class="stage">
+      <div class="bubble-rings" id="bubble-rings">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+      </div>
+      <div id="current-note-bubble" class="magic-bubble idle" aria-live="polite" aria-label="Nota corrente">
+        <span id="display-note-name" class="note-name-display">--</span>
+        <span id="display-letter"    class="note-letter-display">?</span>
+      </div>
+    </div>
+  </div>
 
-        const NOTE_NAMES = ["Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si"];
-        const MAPPA_LETTERE = {
-            "Do2":"A","Re2":"B","Mi2":"C","Fa2":"D","Sol2":"E","La2":"F","Si2":"G",
-            "Do3":"H","Re3":"I","Mi3":"L","Fa3":"M","Sol3":"N","La3":"O","Si3":"P",
-            "Do4":"Q","Re4":"R","Mi4":"S","Fa4":"T","Sol4":"U","La4":"V","Si4":"Z"
-        };
+  <div class="glass sentence-card card-anim" role="region" aria-label="Frase scritta">
+    <div class="sentence-inner">
+      <span class="sentence-body"><span id="sentence-text"></span><span id="sentence-cursor" aria-hidden="true"></span></span>
+    </div>
+  </div>
 
-        const TARGET_NOTES = [];
+  <div class="glass controls-card card-anim">
+    <div class="controls">
+      <button id="btn-start"  class="btn" onclick="startMic()">▶ Inizia</button>
+      <button id="btn-space"  class="btn" onclick="insertSpace()" disabled>⎵ Spazio</button>
+      <button id="btn-delete" class="btn" onclick="deleteLastToken()" disabled>⌫ Cancella</button>
+    </div>
+    <div class="status-row">
+      <span id="status">Clicca Inizia per cominciare!</span>
+      <span id="debug-hz" aria-hidden="true"></span>
+    </div>
+  </div>
 
-        function initDataAndGuide() {
-            const guideContainer = document.getElementById('guide-grid');
-            const octaves = [2, 3, 4];
+  <div class="glass guide-card card-anim">
+    <div class="guide-header">
+      <h2>Mappa Violoncello</h2>
+      <div class="guide-line"></div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-section-label lbl-iv"><span class="string-dot"></span>Corda IV</div>
+      <div class="guide-grid" id="grid-iv"></div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-section-label lbl-iii"><span class="string-dot"></span>Corda III</div>
+      <div class="guide-grid" id="grid-iii"></div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-section-label lbl-ii"><span class="string-dot"></span>Corda II</div>
+      <div class="guide-grid" id="grid-ii"></div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-section-label lbl-i"><span class="string-dot"></span>Corda I</div>
+      <div class="guide-grid" id="grid-i"></div>
+    </div>
+  </div>
 
-            octaves.forEach((oct, octIndex) => {
-                Object.keys(MAPPA_LETTERE).forEach(key => {
-                    let cleanKey = key.replace("_", ""); 
-                    let notePart = cleanKey.slice(0, -1); 
-                    let octPart = parseInt(cleanKey.slice(-1)); 
+  <div class="credit card-anim">
+    <div class="credit-line"></div>
+    Un progetto di <a href="#" tabindex="-1">Lab Music Iunco</a>
+  </div>
 
-                    if (octPart !== oct) return;
+</div>
 
-                    let semitoneIndex = NOTE_NAMES.indexOf(notePart);
-                    if (semitoneIndex !== -1) {
-                        let midi = octPart * 12 + semitoneIndex + 12;
-                        let freq = 440 * Math.pow(2, (midi - 69) / 12);
+<script>
 
-                        TARGET_NOTES.push({
-                            id: key, 
-                            name: notePart,
-                            oct: octPart,
-                            freq: freq,
-                            letter: MAPPA_LETTERE[key]
-                        });
+function midiToFreq(m){ return 440 * Math.pow(2, (m - 69) / 12); }
 
-                        let div = document.createElement('div');
-                        div.className = `guide-key oct-${octPart}`;
-                        div.innerHTML = `<span class="key-note">${notePart}${octPart}</span><span class="key-letter">${MAPPA_LETTERE[key]}</span>`;
-                        guideContainer.appendChild(div);
-                    }
-                });
+const PLAYABLE_NOTES = [
+  { id:'IV0',  label:'IV - 0',     string:'iv',  freq: midiToFreq(36), letter:'A', musicNote:'Do₂' },
+  { id:'IV1',  label:'IV - 1',     string:'iv',  freq: midiToFreq(38), letter:'B', musicNote:'Re₂' },
+  { id:'IV3',  label:'IV - 3',     string:'iv',  freq: midiToFreq(40), letter:'C', musicNote:'Mi₂' },
+  { id:'IV4',  label:'IV - 4',     string:'iv',  freq: midiToFreq(41), letter:'D', musicNote:'Fa₂' },
 
-                if (octIndex < octaves.length - 1) {
-                    let breaker = document.createElement('div');
-                    breaker.className = 'octave-break';
-                    guideContainer.appendChild(breaker);
-                }
-            });
-        }
-        initDataAndGuide();
+  { id:'III0', label:'III - 0',    string:'iii', freq: midiToFreq(43), letter:'E', musicNote:'Sol₂' },
+  { id:'III1', label:'III - 1',    string:'iii', freq: midiToFreq(45), letter:'F', musicNote:'La₂'  },
+  { id:'III2', label:'III - 2',    string:'iii', freq: midiToFreq(46), letter:'J', musicNote:'Si♭₂' },
+  { id:'III3', label:'III - 3',    string:'iii', freq: midiToFreq(47), letter:'G', musicNote:'Si₂'  },
+  { id:'III4', label:'III - 4',    string:'iii', freq: midiToFreq(48), letter:'H', musicNote:'Do₃'  },
 
-        let audioCtx, analyser, dataArray;
-        let isRunning = false;
-        let stabilityCount = 0;
-        let lastDetectedNote = null;
-        let lastWriteTime = 0;
-        let sampleRate = 0;
+  { id:'II0',  label:'II - 0',     string:'ii',  freq: midiToFreq(50), letter:'I', musicNote:'Re₃'  },
+  { id:'IIm',  label:'II - mezza', string:'ii',  freq: midiToFreq(51), letter:'K', musicNote:'Re#₃' },
+  { id:'II1',  label:'II - 1',     string:'ii',  freq: midiToFreq(52), letter:'L', musicNote:'Mi₃'  },
+  { id:'II2',  label:'II - 2',     string:'ii',  freq: midiToFreq(53), letter:'M', musicNote:'Fa₃'  },
+  { id:'II3',  label:'II - 3',     string:'ii',  freq: midiToFreq(54), letter:'W', musicNote:'Fa#₃' },
+  { id:'II4',  label:'II - 4',     string:'ii',  freq: midiToFreq(55), letter:'N', musicNote:'Sol₃' },
 
-        async function avviaMicrofono() {
-            if (isRunning) return;
-            const btn = document.getElementById('btn-start');
+  { id:'I0',   label:'I - 0',      string:'i',   freq: midiToFreq(57), letter:'O', musicNote:'La₃'  },
+  { id:'Im',   label:'I - mezza',  string:'i',   freq: midiToFreq(58), letter:'X', musicNote:'Si♭₃' },
+  { id:'I1',   label:'I - 1',      string:'i',   freq: midiToFreq(59), letter:'P', musicNote:'Si₃'  },
+  { id:'I2',   label:'I - 2',      string:'i',   freq: midiToFreq(60), letter:'Q', musicNote:'Do₄'  },
+  { id:'I3',   label:'I - 3',      string:'i',   freq: midiToFreq(61), letter:'Y', musicNote:'Do#₄' },
+  { id:'I4',   label:'I - 4',      string:'i',   freq: midiToFreq(62), letter:'R', musicNote:'Re₄'  },
+  { id:'I4p1', label:'I - 4ª p.1', string:'i',   freq: midiToFreq(64), letter:'S', musicNote:'Mi₄'  },
+  { id:'I4p2', label:'I - 4ª p.2', string:'i',   freq: midiToFreq(65), letter:'T', musicNote:'Fa₄'  },
+  { id:'I4p3', label:'I - 4ª p.3', string:'i',   freq: midiToFreq(66), letter:'U', musicNote:'Fa#₄' },
+  { id:'I4p4', label:'I - 4ª p.4', string:'i',   freq: midiToFreq(67), letter:'V', musicNote:'Sol₄' },
+  { id:'I3ar', label:'I - 3 Ø',    string:'i',   freq: midiToFreq(69), letter:'Z', musicNote:'La₄'  },
+];
 
-            try {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                sampleRate = audioCtx.sampleRate;
+(function buildGuide() {
+  const grids = { iv:'grid-iv', iii:'grid-iii', ii:'grid-ii', i:'grid-i' };
+  PLAYABLE_NOTES.forEach(n => {
+    const el = document.getElementById(grids[n.string]);
+    if (!el) return;
+    const div = document.createElement('div');
+    div.className = `guide-key str-${n.string}`;
+    div.innerHTML =
+      `<span class="key-note">${n.label}</span>` +
+      `<span class="key-letter">${n.letter}</span>` +
+      `<span class="key-music-note">${n.musicNote}</span>`;
+    el.appendChild(div);
+  });
+})();
 
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    audio: { 
-                        echoCancellation: false, 
-                        noiseSuppression: false, 
-                        autoGainControl: false 
-                    }
-                });
+const CFG = {
+  bufferSize: 4096,
+  yinThreshold: 0.15,
+  probabilityThreshold: 0.80,
+  noteToleranceCents: 45,
 
-                analyser = audioCtx.createAnalyser();
-                analyser.fftSize = CONFIG.bufferSize; 
+  holdMs: 1000,
+  glitchToleranceMs: 300,
+  reloadDelayMs: 2000,
 
-                const source = audioCtx.createMediaStreamSource(stream);
-                source.connect(analyser);
+  voteWindowMs: 150,
+  voteMinRatio: 0.60,
 
-                dataArray = new Float32Array(CONFIG.bufferSize);
-                isRunning = true;
+  lerpVol: 0.008,
+  lerpStab: 0.012,
+  lerpPitch: 0.010,
+};
 
-                btn.textContent = "👂 Sto ascoltando...";
-                btn.style.background = "linear-gradient(135deg, #94A3B8 0%, #64748B 100%)"; 
-                btn.style.boxShadow = "none";
-                document.getElementById('status').textContent = "Vai! Suona una nota lunga!";
+const UI = {
+  volumeBar:     document.getElementById('volume-bar'),
+  stabilityBar:  document.getElementById('stability-bar'),
+  pitchMarker:   document.getElementById('pitch-marker'),
+  noteName:      document.getElementById('display-note-name'),
+  noteLetter:    document.getElementById('display-letter'),
+  bubble:        document.getElementById('current-note-bubble'),
+  bubbleRings:   document.getElementById('bubble-rings'),
+  sentence:      document.getElementById('sentence-text'),
+  sentenceInner: document.querySelector('.sentence-inner'),
+  status:        document.getElementById('status'),
+  debugHz:       document.getElementById('debug-hz'),
+  btnStart:      document.getElementById('btn-start'),
+  btnSpace:      document.getElementById('btn-space'),
+  btnDelete:     document.getElementById('btn-delete'),
+};
 
-                detectLoop();
+const state = {
+  audio: null, stream: null, running: false,
+  phase: 'IDLE',
+  currentNote: null,
+  accumulatedMs: 0,
+  glitchTimer: 0,
+  lockTimer: 0,
+  lastFrameTime: 0,
+  recentNotes: [],
+  volTarget: 0, stabTarget: 0, pitchTarget: 0,
+  volDisplay: 0, stabDisplay: 0, pitchDisplay: 0,
+  flyingLetter: null
+};
 
-            } catch (err) {
-                console.error(err);
-                alert("Non riesco a sentire! Controlla il microfono.");
-            }
-        }
+async function startMic() {
+  if (state.running) return;
+  try {
+    const ctx    = new (window.AudioContext || window.webkitAudioContext)();
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation:false, noiseSuppression:false, autoGainControl:false }
+    });
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = CFG.bufferSize;
+    ctx.createMediaStreamSource(stream).connect(analyser);
+    
+    state.audio = { ctx, analyser, dataArray: new Float32Array(CFG.bufferSize), sampleRate: ctx.sampleRate };
+    state.stream = stream;
+    state.running = true;
+    state.lastFrameTime = performance.now();
+    
+    UI.btnStart.textContent = '⏹ Ferma';
+    UI.btnStart.onclick     = stopMic;
+    UI.btnStart.style.cssText = 'background:rgba(255,59,48,0.12);border:1.5px solid rgba(255,59,48,0.25);color:#FF3B30;box-shadow:none;';
+    UI.status.textContent   = 'Ascoltando… suona una nota!';
+    UI.btnSpace.disabled  = false;
+    UI.btnDelete.disabled = false;
+    
+    requestAnimationFrame(audioLoop);
+  } catch(e) {
+    UI.status.textContent = 'Microfono non accessibile';
+    alert('Non riesco a sentire! Controlla i permessi del microfono.');
+  }
+}
 
-        function getPitchYIN(buffer, sampleRate) {
-            let bufferSize = buffer.length;
-            let yinBuffer = new Float32Array(bufferSize / 2);
-            let probability = 0.0;
-            let pitchInHz = -1;
+function stopMic() {
+  state.running = false;
+  if (state.stream) { state.stream.getTracks().forEach(t => t.stop()); state.stream = null; }
+  if (state.audio)  { state.audio.ctx.close(); state.audio = null; }
+  resetDetection();
+  UI.btnStart.textContent = '▶ Inizia';
+  UI.btnStart.onclick     = startMic;
+  UI.btnStart.style.cssText = 'background:#4F80FF;color:#fff;box-shadow:0 4px 20px rgba(79,128,255,0.38);padding-left:28px;padding-right:28px;';
+  UI.status.textContent   = 'Clicca Inizia per cominciare!';
+  UI.debugHz.textContent  = '';
+  UI.volumeBar.style.width = '0%';
+  state.volTarget = state.volDisplay = state.stabTarget = state.stabDisplay = state.pitchTarget = state.pitchDisplay = 0;
+  UI.pitchMarker.style.transform = 'translate(-50%,-50%) translateX(0px)';
+  UI.pitchMarker.className = '';
+  UI.btnSpace.disabled  = true;
+  UI.btnDelete.disabled = true;
+}
 
-            for (let tau = 0; tau < bufferSize / 2; tau++) yinBuffer[tau] = 0;
-            for (let tau = 1; tau < bufferSize / 2; tau++) {
-                for (let i = 0; i < bufferSize / 2; i++) {
-                    let delta = buffer[i] - buffer[i + tau];
-                    yinBuffer[tau] += delta * delta;
-                }
-            }
+function detectPitch(buffer, sampleRate) {
+  const half = buffer.length >> 1;
+  const yin  = new Float32Array(half);
+  let runSum = 0;
+  for (let t = 1; t < half; t++) {
+    let s = 0;
+    for (let i = 0; i < half; i++) { const d = buffer[i] - buffer[i+t]; s += d*d; }
+    yin[t] = s;
+  }
+  yin[0] = 1;
+  for (let t = 1; t < half; t++) { runSum += yin[t]; yin[t] = runSum > 0 ? yin[t]*t/runSum : 1; }
+  let tau = -1, prob = 0;
+  for (let t = 2; t < half; t++) {
+    if (yin[t] < CFG.yinThreshold) {
+      while (t+1 < half && yin[t+1] < yin[t]) t++;
+      tau = t; prob = 1 - yin[t]; break;
+    }
+  }
+  if (tau === -1) return { pitch:-1, probability:0 };
+  const y0 = yin[tau-1] ?? yin[tau], y1 = yin[tau], y2 = yin[tau+1] ?? yin[tau];
+  const denom = 2*(2*y1 - y2 - y0);
+  const refined = Math.abs(denom) > 1e-6 ? tau + (y2-y0)/denom : tau;
+  return { pitch: sampleRate/refined, probability: prob };
+}
 
-            yinBuffer[0] = 1;
-            let runningSum = 0;
-            for (let tau = 1; tau < bufferSize / 2; tau++) {
-                runningSum += yinBuffer[tau];
-                yinBuffer[tau] *= tau / runningSum;
-            }
+function matchNote(pitch) {
+  if (pitch < 50 || pitch > 1500) return null;
+  let best = null, minCents = Infinity;
+  for (const n of PLAYABLE_NOTES) {
+    const c = Math.abs(1200 * Math.log2(pitch / n.freq));
+    if (c < minCents) { minCents = c; best = n; }
+  }
+  return minCents < CFG.noteToleranceCents ? best : null;
+}
 
-            let tauEstimate = -1;
-            for (let tau = 2; tau < bufferSize / 2; tau++) {
-                if (yinBuffer[tau] < CONFIG.yinThreshold) {
-                    while (tau + 1 < bufferSize / 2 && yinBuffer[tau + 1] < yinBuffer[tau]) tau++;
-                    tauEstimate = tau;
-                    probability = 1 - yinBuffer[tau];
-                    break;
-                }
-            }
+function timeLerp(current, target, rate, dt) {
+  return target + (current - target) * Math.exp(-rate * dt);
+}
 
-            if (tauEstimate !== -1) {
-                let betterTau = tauEstimate;
-                let x0 = tauEstimate;
-                let x2 = (tauEstimate + 1 < bufferSize / 2) ? tauEstimate + 1 : tauEstimate;
-                let x1 = (tauEstimate - 1 >= 0) ? tauEstimate - 1 : tauEstimate;
-                let s0 = yinBuffer[x0];
-                let s1 = yinBuffer[x1];
-                let s2 = yinBuffer[x2];
-                if (s0 < s1 && s0 < s2) betterTau = x0 + (s2 - s1) / (2 * (2 * s0 - s2 - s1));
-                pitchInHz = sampleRate / betterTau;
-            }
+function audioLoop(now) {
+  if (!state.running) return;
+  requestAnimationFrame(audioLoop);
+  
+  const dt = Math.min(now - state.lastFrameTime, 100);
+  state.lastFrameTime = now;
 
-            return { pitch: pitchInHz, probability: probability };
-        }
+  if (!state.audio) return;
+  const { analyser, dataArray, sampleRate } = state.audio;
+  analyser.getFloatTimeDomainData(dataArray);
+  
+  const { pitch, probability } = detectPitch(dataArray, sampleRate);
+  const rawNote = probability > CFG.probabilityThreshold ? matchNote(pitch) : null;
 
-        function findClosestNote(pitch) {
-            if (pitch < 50 || pitch > 2000) return null; 
-            let closest = null;
-            let minCentsDiff = Infinity;
+  if (rawNote) state.recentNotes.push({ id: rawNote.id, time: now });
+  state.recentNotes = state.recentNotes.filter(n => (now - n.time) <= CFG.voteWindowMs);
 
-            for (let note of TARGET_NOTES) {
-                let centsDiff = 1200 * Math.log2(pitch / note.freq);
-                let absCents = Math.abs(centsDiff);
-                if (absCents < minCentsDiff) {
-                    minCentsDiff = absCents;
-                    closest = note;
-                }
-            }
+  let detected = null;
+  if (state.recentNotes.length > 0) {
+    const counts = {};
+    state.recentNotes.forEach(n => { counts[n.id] = (counts[n.id] || 0) + 1; });
+    let bestId = null, bestCount = 0;
+    for (const [id, c] of Object.entries(counts)) {
+      if (c > bestCount) { bestCount = c; bestId = id; }
+    }
+    if (bestCount / state.recentNotes.length >= CFG.voteMinRatio) {
+      detected = PLAYABLE_NOTES.find(n => n.id === bestId) || null;
+    }
+  }
 
-            if (minCentsDiff < CONFIG.noteToleranceCents) return closest;
-            return null;
-        }
+  state.volTarget = Math.min(100, Math.max(0, (probability - 0.5) * 200));
+  
+  if (rawNote) {
+    const centsDiff = 1200 * Math.log2(pitch / rawNote.freq);
+    const rail = UI.pitchMarker.parentElement.querySelector('.pitch-rail');
+    const maxPx = rail.clientWidth / 2 - 9;
+    const rawPx = (centsDiff / CFG.noteToleranceCents) * (rail.clientWidth / 2);
+    
+    state.pitchTarget = Math.min(maxPx, Math.max(-maxPx, rawPx));
+    UI.pitchMarker.className = Math.abs(centsDiff) < 8 ? 'tuned' : rawPx > 0 ? 'sharp' : 'flat';
+    UI.debugHz.textContent = `${pitch.toFixed(1)} Hz · ${rawNote.label} · ${rawNote.musicNote}`;
+    showNote(rawNote);
+  } else {
+    state.pitchTarget = 0;
+    UI.pitchMarker.className = '';
+    if (!detected) UI.debugHz.textContent = '';
+  }
 
-        function detectLoop() {
-            if (!isRunning) return;
-            requestAnimationFrame(detectLoop);
+  if (state.phase === 'IDLE') {
+    state.stabTarget = 0;
+    
+    if (detected) {
+      state.phase = 'LOADING';
+      state.currentNote = detected;
+      state.accumulatedMs = 0;
+      state.glitchTimer = 0;
+    }
+    
+  } else if (state.phase === 'LOADING') {
+    
+    if (detected && detected.id === state.currentNote.id) {
+      state.accumulatedMs += dt;
+      state.glitchTimer = 0;
+      state.stabTarget = Math.min(100, (state.accumulatedMs / CFG.holdMs) * 100);
+      UI.stabilityBar.classList.remove('glitching');
 
-            analyser.getFloatTimeDomainData(dataArray);
+      if (state.accumulatedMs >= CFG.holdMs) {
+        commitNote(state.currentNote);
+        state.phase = 'LOCKED';
+        state.lockTimer = 0;
+        state.stabTarget = 100;
+        UI.stabilityBar.style.width = '100%';
+        UI.stabilityBar.classList.remove('glitching');
+        UI.stabilityBar.classList.add('locked');
+      }
+      
+    } else if (!detected) {
+      state.glitchTimer += dt;
+      UI.stabilityBar.classList.add('glitching');
+      
+      if (state.glitchTimer > CFG.glitchToleranceMs) {
+        resetDetection();
+      }
+      
+    } else {
+      state.currentNote = detected;
+      state.accumulatedMs = 0;
+      state.glitchTimer = 0;
+      state.stabTarget = 0;
+    }
+    
+  } else if (state.phase === 'LOCKED') {
+    state.stabTarget = 100;
+    state.lockTimer += dt;
+    
+    if (state.lockTimer > CFG.reloadDelayMs) {
+      resetDetection();
+    }
+  }
 
-            let result = getPitchYIN(dataArray, sampleRate);
-            let detectedPitch = result.pitch;
-            let probability = result.probability; 
-            let visualScore = Math.max(0, probability - 0.5) * 200; 
-            updateVolumeBar(visualScore);
+  state.volDisplay = timeLerp(state.volDisplay, state.volTarget, CFG.lerpVol, dt);
+  state.stabDisplay = timeLerp(state.stabDisplay, state.stabTarget, CFG.lerpStab, dt);
+  state.pitchDisplay = timeLerp(state.pitchDisplay, state.pitchTarget, CFG.lerpPitch, dt);
 
-            let bestNote = null;
-            if (probability > CONFIG.probabilityThreshold) {
-                bestNote = findClosestNote(detectedPitch);
-            }
+  UI.volumeBar.style.width = state.volDisplay.toFixed(2) + '%';
+  UI.stabilityBar.style.width = state.stabDisplay.toFixed(2) + '%';
+  UI.pitchMarker.style.transform = `translate(-50%,-50%) translateX(${state.pitchDisplay.toFixed(2)}px)`;
+}
 
-            if (bestNote) {
-                document.getElementById('debug-hz').textContent = `Hz: ${detectedPitch.toFixed(1)} | Nota: ${bestNote.name}${bestNote.oct}`;
+function resetDetection() {
+  state.currentNote = null;
+  state.phase = 'IDLE';
+  state.accumulatedMs = 0;
+  state.glitchTimer = 0;
+  state.recentNotes = [];
+  state.stabTarget = 0;
+  UI.stabilityBar.classList.remove('glitching', 'locked');
+  UI.pitchMarker.style.transform = 'translate(-50%,-50%) translateX(0px)';
+  UI.pitchMarker.className = '';
+  UI.noteName.textContent = '--';
+  UI.noteLetter.textContent = '?';
+  UI.bubble.className = 'magic-bubble idle';
+  UI.bubbleRings.className = 'bubble-rings';
+}
 
-                updatePreview(bestNote);
+function showNote(n) {
+  UI.noteName.textContent = n.musicNote;
+  UI.noteLetter.textContent = n.letter;
+  if (!UI.bubble.className.includes('active')) {
+    UI.bubble.className = 'magic-bubble visible';
+    UI.bubbleRings.className = 'bubble-rings';
+  }
+}
 
-                const inCooldown = (Date.now() - lastWriteTime < CONFIG.cooldownMs);
+function commitNote(n) {
+  UI.bubble.className = 'magic-bubble active';
+  UI.bubbleRings.className = 'bubble-rings bubble-active';
+  setTimeout(() => {
+    if (UI.bubble.className.includes('active')) {
+      UI.bubble.className = 'magic-bubble visible';
+      UI.bubbleRings.className = 'bubble-rings';
+    }
+  }, 700);
+  flyLetter(n.letter);
+}
 
-                if (inCooldown) {
-                    stabilityCount = 0;
-                    updateStabilityBar(0);
-                    lastDetectedNote = bestNote; 
+function flyLetter(letter) {
+  const fl = document.createElement('div');
+  fl.className = 'flying-letter';
+  fl.textContent = letter;
+  const br = UI.bubble.getBoundingClientRect();
+  fl.style.cssText = `transition:none;left:${br.left+br.width/2-22}px;top:${br.top+br.height/2-34}px;opacity:1;transform:scale(1)`;
+  document.body.appendChild(fl);
+  
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const sr = UI.sentenceInner.getBoundingClientRect();
+    fl.style.transition = 'all 0.72s cubic-bezier(0.22,1,0.36,1)';
+    fl.style.top = (sr.top + sr.height/2 - 28) + 'px';
+    fl.style.left = (sr.left + sr.width/2 - 10) + 'px';
+    fl.style.opacity = '0';
+    fl.style.transform = 'scale(0.18) rotate(270deg)';
+  }));
+  
+  state.flyingLetter = letter;
+  setTimeout(() => {
+    fl.remove();
+    if (state.flyingLetter === letter) { 
+        textTokens.push(letter); 
+        renderSentence(); 
+        state.flyingLetter = null; 
+    }
+  }, 730);
+}
 
-                } else if (lastDetectedNote && lastDetectedNote.id === bestNote.id) {
-                    stabilityCount++;
-                    updateStabilityBar(stabilityCount);
-
-                    if (stabilityCount >= CONFIG.stabilityRequired) {
-                        confermaScrittura(bestNote);
-                        lastWriteTime = Date.now();
-                        stabilityCount = 0; 
-                    }
-                } else {
-                    stabilityCount = Math.max(0, stabilityCount - 3); 
-                    if (stabilityCount === 0) {
-                        lastDetectedNote = bestNote;
-                    }
-                    updateStabilityBar(stabilityCount);
-                }
-            } else {
-                resetSilence();
-            }
-        }
-
-        function updatePreview(note) {
-            const bubble = document.getElementById('current-note-bubble');
-            const dispName = document.getElementById('display-note-name');
-            const dispLetter = document.getElementById('display-letter');
-
-            dispName.innerHTML = `${note.name}<sub>${note.oct}</sub>`;
-            dispLetter.textContent = note.letter;
-            bubble.style.opacity = "1"; 
-            bubble.style.transform = "scale(1.05)";
-            bubble.style.borderColor = "#FEF3C7";
-        }
-
-        function confermaScrittura(note) {
-            const bubble = document.getElementById('current-note-bubble');
-            bubble.classList.add('active'); 
-
-            animaLetteraVersoFrase(note.letter);
-
-            setTimeout(() => {
-                bubble.classList.remove('active');
-            }, 500);
-        }
-
-        function animaLetteraVersoFrase(lettera) {
-            const sentenceArea = document.getElementById('sentence-area');
-            const flyer = document.createElement('div');
-            flyer.classList.add('flying-letter');
-            flyer.textContent = lettera;
-
-            const bubbleRect = document.getElementById('current-note-bubble').getBoundingClientRect();
-            flyer.style.left = (bubbleRect.left + bubbleRect.width/2 - 20) + 'px';
-            flyer.style.top = (bubbleRect.top + bubbleRect.height/2 - 40) + 'px';
-
-            document.body.appendChild(flyer);
-
-            const sentenceRect = sentenceArea.getBoundingClientRect();
-            const destTop = sentenceRect.top + sentenceRect.height/2 - 40;
-            const destLeft = sentenceRect.left + sentenceRect.width/2;
-
-            requestAnimationFrame(() => {
-                flyer.style.top = destTop + 'px';
-                flyer.style.left = destLeft + 'px';
-                flyer.style.opacity = '0';
-                flyer.style.transform = "scale(0.2) rotate(360deg)";
-            });
-
-            setTimeout(() => {
-                flyer.remove();
-                document.getElementById('sentence-text').textContent += lettera;
-            }, 800);
-        }
-
-        function updateVolumeBar(val) {
-            const pct = Math.min(100, val);
-            const bar = document.getElementById('volume-bar');
-            bar.style.width = pct + "%";
-        }
-
-        function updateStabilityBar(val) {
-            const pct = Math.min(100, (val / CONFIG.stabilityRequired) * 100);
-            const bar = document.getElementById('stability-bar');
-            bar.style.width = pct + "%";
-        }
-
-        function resetSilence() {
-            stabilityCount = Math.max(0, stabilityCount - 2);
-            updateStabilityBar(stabilityCount);
-
-            if (stabilityCount === 0) {
-                const bubble = document.getElementById('current-note-bubble');
-                bubble.style.opacity = "0.5";
-                bubble.style.transform = "scale(0.9)";
-                bubble.style.borderColor = "#FEF3C7";
-                document.getElementById('debug-hz').textContent = "...";
-            }
-        }
-        function inserisciSpazio() {
-            const el = document.getElementById('sentence-text');
-            el.textContent += " ";
-        }
-        function cancellaUltima() {
-            const el = document.getElementById('sentence-text');
-            el.textContent = el.textContent.slice(0, -1);
-        }
-    </script>
+const textTokens = [];
+function renderSentence() { document.getElementById('sentence-text').textContent = textTokens.join(''); }
+function insertSpace() { textTokens.push(' '); renderSentence(); }
+function deleteLastToken() { state.flyingLetter = null; if (textTokens.length > 0) { textTokens.pop(); renderSentence(); } }
+</script>
 </body>
 </html>
